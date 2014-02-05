@@ -132,8 +132,9 @@ void receiveAndApplyOutputs(uint8_t *pins)
     char *pinAndValue = NULL;
     while ((pinAndValue = strsep(&buffer, ":")) != NULL) {
       applyValueToPin(pinAndValue, pins);
-      free(pinAndValue);
     }
+
+    free(buffer);
   }
 }
 
