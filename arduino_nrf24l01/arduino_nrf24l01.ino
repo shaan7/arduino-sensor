@@ -16,7 +16,10 @@ https://github.com/stanleyseow/RF24/
 // Set up nRF24L01 radio on SPI pin for CE, CSN
 RF24 radio(8,9);
 
-const uint64_t pipes[2] = { 0xF0F0F0F0E1LL, 0x7365727631LL };
+const unsigned short sensorId = 1;
+const uint64_t basePipe = 0xF0F0F0F0E0LL;
+const uint64_t readPipe = basePipe + 1 + 2*sensorId;
+const uint64_t writePipe = readPipe + 1;
 
 boolean isConfigured = false;
 
@@ -42,8 +45,8 @@ void setup(void)
   radio.setChannel(76);
   radio.setRetries(15,15);
 
-  radio.openWritingPipe(pipes[0]);
-  radio.openReadingPipe(1,pipes[1]);
+  radio.openWritingPipe(writePipe);
+  radio.openReadingPipe(1,readPipe);
 
   // Dump the configuration of the rf unit for debugging
   radio.printDetails();
@@ -72,6 +75,7 @@ void loop(void)
 void readSensorInputs(uint8_t *pins)
 {
   char buffer[BUF_MAX]="";
+  sprintf(buffer, "%hu ", sensorId);
 
   for (int i=0; pins[i]!=INVALID; i++) {
     const uint8_t pin = pins[i];
