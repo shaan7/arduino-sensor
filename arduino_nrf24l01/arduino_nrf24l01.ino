@@ -26,7 +26,7 @@ boolean isConfigured = false;
 uint8_t *inputPins = NULL;
 uint8_t *outputPins = NULL;
 
-static const int BUF_MAX = 32;
+static const int BUF_MAX = 128;
 static const uint8_t INVALID = 255;
 
 void setup(void)
@@ -63,6 +63,7 @@ void loop(void)
 
   if (outputPins) {
     receiveAndApplyOutputs(outputPins);
+    readSensorInputs(outputPins);
   }
 
   if (inputPins) {
